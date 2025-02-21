@@ -28,7 +28,7 @@ const className = computed(() => {
     <br>
   </template>
   <span v-else :class="[{ 'cursor': index == currentLetterIndex }, className, 'min-w-[25px] inline-block']">
-    {{ letter }}
+    {{ className == 'text-rose-700' && letter == ' ' ? '_' : letter }}
   </span>
 </template>
 <style scoped>
@@ -47,5 +47,16 @@ const className = computed(() => {
   height: 3px;
   border-radius: 2px;
   background-color: var(--color-primary);
+  animation: blink .6s infinite alternate;
+}
+
+@keyframes blink {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
 }
 </style>

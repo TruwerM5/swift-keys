@@ -1,15 +1,33 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import LetterVue from '@/components/LetterVue.vue';
-const LETTERS = /^[a-zA-Z0-9,.!?-]{1}$/;
-const EXTRA_BUTTONS = /Shift|Alt|Control/;
-const words = ['AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA', 'notebook', 'cancel', 'explosive', 'wonder', 'laptop', 'writing'];
+import getCorrectLength from '@/utils/getCorrectLength';
+
+const LETTERS = /^[\x20-\x7E]{1}$/;
+const EXTRA_BUTTONS = /Shift|Alt|Tab|Control|F(1[0-2]|[1-9])/;
+const words = ['How about "SwiftKeys" for your touch typing project?',
+  'notebook',
+  'cancel',
+  'explosive',
+  'wonder',
+  'laptop',
+  'writing'].map(w => w + '\n');
+
 const currentWord = computed(() => words[currentWordIndex.value]);
 const currentWordIndex = ref(0);
 const passedLetters = ref<string[]>([]);
 const wrongLetters = ref<string[]>([]);
 const currentLetterIndex = ref(0);
-console.log(currentWord.value.length)
+
+const accuracy = computed(() => {
+  const passedLettersLength = getCorrectLength(passedLetters.value);
+  const wrongLettersLength = getCorrectLength(wrongLetters.value);
+  const result = Math.round(
+    passedLettersLength / (passedLettersLength + wrongLettersLength) * 100
+  );
+  return result || 100;
+});
+
 window.addEventListener('keydown', (e) => {
   const key = e.key;
   if (key == 'Backspace') {
@@ -20,10 +38,12 @@ window.addEventListener('keydown', (e) => {
   if ((LETTERS.test(key) || (key == 'Enter' && currentLetter == '\n')) && key == currentLetter) {
 
     passedLetters.value[currentLetterIndex.value] = currentLetter;
-  } else if (key != currentLetter && !EXTRA_BUTTONS.test(key)) {
-    wrongLetters.value[currentLetterIndex.value] = currentLetter;
   }
   if (!EXTRA_BUTTONS.test(key)) {
+
+    if (key != currentLetter) {
+      wrongLetters.value[currentLetterIndex.value] = currentLetter;
+    }
     currentLetterIndex.value++;
   }
 
@@ -70,6 +90,7 @@ function backSpace() {
         <LetterVue :index="i" :currentLetterIndex="currentLetterIndex" :letter="letter" :passedLetters="passedLetters"
           :wrongLetters="wrongLetters" />
       </template>
+      <p :class="[accuracy < 90 ? 'text-rose-700' : '']">{{ accuracy }}%</p>
     </div>
   </div>
 </template>
