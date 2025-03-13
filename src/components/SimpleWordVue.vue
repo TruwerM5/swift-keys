@@ -2,7 +2,7 @@
 import { ref, computed } from 'vue';
 import LetterVue from '@/components/LetterVue.vue';
 import getCorrectLength from '@/utils/getCorrectLength';
-
+import TheProgressBar from './TheProgressBar.vue';
 const LETTERS = /^[\x20-\x7E]{1}$/;
 const EXTRA_BUTTONS = /Shift|Alt|Tab|Control|F(1[0-2]|[1-9])/;
 const words = ['How about "SwiftKeys" for your touch typing project?',
@@ -25,7 +25,8 @@ const accuracy = computed(() => {
   const result = Math.round(
     passedLettersLength / (passedLettersLength + wrongLettersLength) * 100
   );
-  return result || 100;
+  
+  return isNaN(result) ? 100 : result;
 });
 
 window.addEventListener('keydown', (e) => {
@@ -91,6 +92,6 @@ function backSpace() {
           :wrongLetters="wrongLetters" />
       </template>
     </div>
-    <p :class="[{'text-rose-500': accuracy < 90}]">{{ accuracy }}%</p>
   </div>
+  <TheProgressBar :accuracy="accuracy" />
 </template>

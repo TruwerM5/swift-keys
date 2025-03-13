@@ -1,7 +1,11 @@
 @import 'tailwindcss';
-@import '_variables';
 
-
+@theme {
+    --color-primary: #6366f1;
+    --text-ul: 38px;
+    --font-rm: 'Roboto Mono', 'sans-serif';
+    --font-roboto: 'Roboto', 'sans-serif';
+}
 
 button {
     cursor: pointer;
