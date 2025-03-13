@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import SimpleWordVue from '@/components/SimpleWordVue.vue';
+import SimpleWordVue from '@/components/SimpleWordVue.vue'
 </script>
 
 <template>
