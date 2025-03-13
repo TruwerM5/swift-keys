@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue';
+
 const props = defineProps<{
   letter: string;
   currentLetterIndex: number;
@@ -8,17 +9,39 @@ const props = defineProps<{
   index: number;
 }>();
 
-const className = computed(() => {
+const TEXT_RED = 'text-rose-700';
+const UNDERSCORE = '_';
 
-  if (props.wrongLetters[props.index] != undefined) {
-    return 'text-rose-700';
-  }
-  if (props.passedLetters[props.index] == props.letter) {
-    return 'text-zinc-400';
-  }
-  return 'text-zinc-800';
-})
+const letterClassName = computed(() => {
 
+  let className = '';
+
+  if (props.wrongLetters[props.index] !== undefined) {
+    className = 'text-rose-700';
+  } else if (props.passedLetters[props.index] === props.letter) {
+    className = 'text-zinc-400';
+  } else {
+    className = 'text-zinc-800';
+  }
+
+  if (props.index === props.currentLetterIndex) {
+    className += ' cursor';
+  }
+
+  return className;
+});
+
+const textContent = computed(() => {
+
+  const condition = letterClassName.value.includes(TEXT_RED)
+    && props.letter === ' ';
+
+  if (condition) {
+    return UNDERSCORE;
+  }
+
+  return props.letter;
+});
 
 </script>
 
@@ -27,13 +50,14 @@ const className = computed(() => {
     <span class="text-zinc-400">&para;</span>
     <br>
   </template>
-  <span v-else :class="[{ 'cursor': index == currentLetterIndex }, className, 'min-w-[25px] inline-block']">
-    {{ className == 'text-rose-700' && letter == ' ' ? '_' : letter }}
+  <span v-else :class="[letterClassName, 'min-w-[25px] min-h-[25px] inline-block']">
+    {{ textContent }}
   </span>
 </template>
 <style scoped>
 .cursor {
   position: relative;
+
 }
 
 .cursor::after {
@@ -48,15 +72,20 @@ const className = computed(() => {
   border-radius: 2px;
   background-color: var(--color-primary);
   animation: blink .6s infinite alternate;
+
 }
+
+
+
 
 @keyframes blink {
   from {
-    opacity: 1;
+    opacity: 1
   }
 
   to {
-    opacity: 0;
+    opacity: 0
   }
+
 }
 </style>
