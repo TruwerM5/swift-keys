@@ -84,13 +84,13 @@ function backSpace() {
 
 </script>
 <template>
-  <div class="flex justify-center">
-    <div class="text-[46px] px-[40px] max-w-[1000px]">
+  <div class="flex flex-col items-center justify-center">
+    <div class="flex items-end flex-wrap text-[46px]  px-[40px] max-w-[1000px]">
       <template v-for="letter, i in currentWord" :key="i">
         <LetterVue :index="i" :currentLetterIndex="currentLetterIndex" :letter="letter" :passedLetters="passedLetters"
           :wrongLetters="wrongLetters" />
       </template>
-      <p :class="[accuracy < 90 ? 'text-rose-700' : '']">{{ accuracy }}%</p>
     </div>
+    <p :class="[{'text-rose-500': accuracy < 90}]">{{ accuracy }}%</p>
   </div>
 </template>
