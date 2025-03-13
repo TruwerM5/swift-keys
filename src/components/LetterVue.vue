@@ -23,20 +23,20 @@ const letterClassName = computed(() => {
   } else {
     className = 'text-zinc-800';
   }
-  
-  if(props.index === props.currentLetterIndex) {
+
+  if (props.index === props.currentLetterIndex) {
     className += ' cursor';
   }
-  
+
   return className;
 });
 
 const textContent = computed(() => {
-  
+
   const condition = letterClassName.value.includes(TEXT_RED)
-  && props.letter === ' ';
-  
-  if(condition) {
+    && props.letter === ' ';
+
+  if (condition) {
     return UNDERSCORE;
   }
 
@@ -54,28 +54,38 @@ const textContent = computed(() => {
     {{ textContent }}
   </span>
 </template>
-<style scoped lang="sass">
-.cursor
-  position: relative
+<style scoped>
+.cursor {
+  position: relative;
 
-  &::after
-    content: ''
-    display: block
-    position: absolute
-    left: 0
-    bottom: 10px
-    width: 100%
-    min-width: 25px
-    height: 3px
-    border-radius: 2px
-    background-color: var(--color-primary)
-    animation: blink .6s infinite alternate
+}
+
+.cursor::after {
+  content: '';
+  display: block;
+  position: absolute;
+  left: 0;
+  bottom: 10px;
+  width: 100%;
+  min-width: 25px;
+  height: 3px;
+  border-radius: 2px;
+  background-color: var(--color-primary);
+  animation: blink .6s infinite alternate;
+
+}
 
 
-@keyframes blink 
-  from
+
+
+@keyframes blink {
+  from {
     opacity: 1
-    
-  to
+  }
+
+  to {
     opacity: 0
+  }
+
+}
 </style>
