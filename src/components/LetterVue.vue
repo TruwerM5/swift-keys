@@ -13,7 +13,6 @@ const TEXT_RED = 'text-rose-700';
 const UNDERSCORE = '_';
 
 const letterClassName = computed(() => {
-
   let className = '';
 
   if (props.wrongLetters[props.index] !== undefined) {
@@ -23,32 +22,29 @@ const letterClassName = computed(() => {
   } else {
     className = 'text-zinc-800';
   }
-  
-  if(props.index === props.currentLetterIndex) {
+
+  if (props.index === props.currentLetterIndex) {
     className += ' cursor';
   }
-  
+
   return className;
 });
 
 const textContent = computed(() => {
-  
-  const condition = letterClassName.value.includes(TEXT_RED)
-  && props.letter === ' ';
-  
-  if(condition) {
+  const condition = letterClassName.value.includes(TEXT_RED) && props.letter === ' ';
+
+  if (condition) {
     return UNDERSCORE;
   }
 
   return props.letter;
 });
-
 </script>
 
 <template>
   <template v-if="letter == '\n'">
     <span class="text-zinc-400">&para;</span>
-    <br>
+    <br />
   </template>
   <span v-else :class="[letterClassName, 'min-w-[25px] min-h-[25px] inline-block']">
     {{ textContent }}
@@ -72,10 +68,10 @@ const textContent = computed(() => {
     animation: blink .6s infinite alternate
 
 
-@keyframes blink 
+@keyframes blink
   from
     opacity: 1
-    
+
   to
     opacity: 0
 </style>

@@ -9,7 +9,7 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 export default defineConfig({
   plugins: [
     vue(), 
-    tailwindcss(), 
+    tailwindcss(),
     vueDevTools()
   ],
   resolve: {

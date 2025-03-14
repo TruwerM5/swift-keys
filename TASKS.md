@@ -6,3 +6,5 @@
 3. accuracy in %
 4. keyboard image
 5. score bar in bottom
+
+!!! Смещать текст либо при каждом нажатии клавиши transform: translateX(...px), либо при определенном значении индекса currentLetterIndex
