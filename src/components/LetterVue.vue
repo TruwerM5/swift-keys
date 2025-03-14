@@ -66,16 +66,15 @@ const textContent = computed(() => {
   height: 3px;
   border-radius: 2px;
   background-color: var(--color-primary);
-  animation: blink .6s infinite alternate;
+  animation: blink 0.6s infinite alternate;
 }
-  
+
 @keyframes blink {
   from {
     opacity: 1;
   }
   to {
-    opacity: 0
+    opacity: 0;
   }
-    
-} 
+}
 </style>

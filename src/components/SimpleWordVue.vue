@@ -85,8 +85,8 @@ provide('accuracy', accuracy);
 </script>
 <template>
   <div class="flex flex-col items-center justify-center">
-    <div class="overflow-hidden  max-w-[1100px] px-[40px]">
-      <div class="flex items-end text-[46px]" :style="{transform: `translateX(-25px)`}">
+    <div class="overflow-hidden max-w-[1100px] px-[40px]">
+      <div class="flex items-end text-[46px]" :style="{ transform: `translateX(-25px)` }">
         <template v-for="(letter, i) in currentWord" :key="i">
           <LetterVue
             :index="i"
@@ -96,9 +96,8 @@ provide('accuracy', accuracy);
             :wrongLetters="wrongLetters"
           />
         </template>
+      </div>
     </div>
-    </div>
-    
   </div>
   <TheProgressBar :accuracy="accuracy" />
 </template>

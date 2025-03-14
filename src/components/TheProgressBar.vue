@@ -1,12 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue';
 import TheAccuracy from '@/components/TheAccuracy.vue';
-
-const props = defineProps<{
-  accuracy: number;
-}>();
-
-
 
 </script>
 
@@ -18,7 +11,4 @@ const props = defineProps<{
   </div>
 </template>
 
-<style>
-
-
-</style>
+<style></style>

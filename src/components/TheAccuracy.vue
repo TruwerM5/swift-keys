@@ -8,8 +8,7 @@ const colorPrimary = '#6366f1';
 const RADIUS = 40;
 
 const offset = computed(() => {
-  if(accuracy?.value === undefined) {
-   
+  if (accuracy?.value === undefined) {
     return 0;
   }
   const perimeter = 2 * Math.PI * RADIUS;
@@ -17,49 +16,47 @@ const offset = computed(() => {
 });
 
 const textColor = computed(() => {
-    if (accuracy?.value < 90) {
-        return colorRed;
-    }
-    return colorGray;
+  if (accuracy?.value < 90) {
+    return colorRed;
+  }
+  return colorGray;
 });
 
 const borderColor = computed(() => {
-    if(textColor.value === colorRed) {
-        return colorRed;
-    }
-    return colorPrimary;
-})
-
+  if (textColor.value === colorRed) {
+    return colorRed;
+  }
+  return colorPrimary;
+});
 </script>
 <template>
-    <div class="w-fit text-center">
-        <svg id="myCircle" width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="50" cy="50" :r="RADIUS" fill="none" stroke="#ddd" stroke-width="3"/>
-        <circle
-            id="circle"
-            cx="50"
-            cy="50"
-            :r="RADIUS"
-            fill="none"
-            :stroke="borderColor"
-            stroke-width="3"
-            :stroke-dasharray="2 * Math.PI * RADIUS"
-            :stroke-dashoffset="offset"
-            class="progress-circle"
+  <div class="w-fit text-center">
+    <svg
+      id="myCircle"
+      width="100"
+      height="100"
+      viewBox="0 0 100 100"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <circle cx="50" cy="50" :r="RADIUS" fill="none" stroke="#ddd" stroke-width="3" />
+      <circle
+        id="circle"
+        cx="50"
+        cy="50"
+        :r="RADIUS"
+        fill="none"
+        :stroke="borderColor"
+        stroke-width="3"
+        :stroke-dasharray="2 * Math.PI * RADIUS"
+        :stroke-dashoffset="offset"
+        class="progress-circle"
       />
-      <text 
-        x="50" 
-        y="55" 
-        :fill="textColor"
-        font-weight="bolder"
-        text-anchor="middle" 
-      >
+      <text x="50" y="55" :fill="textColor" font-weight="bolder" text-anchor="middle">
         {{ accuracy }}%
       </text>
     </svg>
     <span>accuracy</span>
-    </div>
-
+  </div>
 </template>
 <style>
 .progress-circle {
