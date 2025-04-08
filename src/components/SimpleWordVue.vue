@@ -5,13 +5,15 @@ import getCorrectLength from '@/utils/getCorrectLength';
 import TheProgressBar from './TheProgressBar.vue';
 const LETTERS = /^[\x20-\x7E]{1}$/;
 const EXTRA_BUTTONS = /Shift|Alt|Tab|Control|F(1[0-2]|[1-9])/;
-const words = ['How about "SwiftKeys" for your touch typing project?',
+const words = [
+  'How about "SwiftKeys" for your touch typing project?',
   'notebook',
   'cancel',
   'explosive',
   'wonder',
   'laptop',
-  'writing'].map(w => w + '\n');
+  'writing',
+].map((w) => w + '\n');
 
 const currentWord = computed(() => words[currentWordIndex.value]);
 const currentWordIndex = ref(0);
@@ -23,7 +25,7 @@ const accuracy = computed(() => {
   const passedLettersLength = getCorrectLength(passedLetters.value);
   const wrongLettersLength = getCorrectLength(wrongLetters.value);
   const result = Math.round(
-    passedLettersLength / (passedLettersLength + wrongLettersLength) * 100
+    (passedLettersLength / (passedLettersLength + wrongLettersLength)) * 100,
   );
 
   return isNaN(result) ? 100 : result;
@@ -37,33 +39,32 @@ window.addEventListener('keydown', (e) => {
     return;
   }
   const currentLetter = currentWord.value.charAt(currentLetterIndex.value);
-  if ((LETTERS.test(key) || (key == 'Enter' && currentLetter == '\n')) && key == currentLetter) {
-
+  if (
+    (LETTERS.test(key) || (key == 'Enter' && currentLetter == '\n')) &&
+    key == currentLetter
+  ) {
     passedLetters.value[currentLetterIndex.value] = currentLetter;
   }
   if (!EXTRA_BUTTONS.test(key)) {
-
     if (key != currentLetter) {
       wrongLetters.value[currentLetterIndex.value] = currentLetter;
     }
     currentLetterIndex.value++;
   }
 
-
-  if (currentWord.value == passedLetters.value.join('') || currentLetterIndex.value == currentWord.value.length) {
+  if (
+    currentWord.value == passedLetters.value.join('') ||
+    currentLetterIndex.value == currentWord.value.length
+  ) {
     reset();
-    if (currentWordIndex.value < words.length - 1)
-      currentWordIndex.value++;
-    else
-      currentWordIndex.value = 0;
+    if (currentWordIndex.value < words.length - 1) currentWordIndex.value++;
+    else currentWordIndex.value = 0;
     return;
   }
-
 });
 
-
 function reset() {
-  passedLetters.value = []
+  passedLetters.value = [];
   wrongLetters.value = [];
   currentLetterIndex.value = 0;
 }
@@ -80,17 +81,19 @@ function backSpace() {
   if (wrongLength - 1 == currentLetterIndex.value) {
     wrongLetters.value.pop();
   }
-
-
 }
-
 </script>
 <template>
   <div class="flex flex-col items-center justify-center">
-    <div class="flex items-end flex-wrap text-[46px]  px-[40px] max-w-[1000px]">
-      <template v-for="letter, i in currentWord" :key="i">
-        <LetterVue :index="i" :currentLetterIndex="currentLetterIndex" :letter="letter" :passedLetters="passedLetters"
-          :wrongLetters="wrongLetters" />
+    <div class="flex items-end flex-wrap text-[46px] px-[40px] max-w-[1000px]">
+      <template v-for="(letter, i) in currentWord" :key="i">
+        <LetterVue
+          :index="i"
+          :currentLetterIndex="currentLetterIndex"
+          :letter="letter"
+          :passedLetters="passedLetters"
+          :wrongLetters="wrongLetters"
+        />
       </template>
     </div>
   </div>

@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterLink, RouterView } from 'vue-router';
 import LogoVue from './components/LogoVue.vue';
 import SidebarVue from './components/SidebarVue.vue';
-
 </script>
 
 <template>
