@@ -25,11 +25,12 @@ const accuracy = computed(() => {
   const result = Math.round(
     passedLettersLength / (passedLettersLength + wrongLettersLength) * 100
   );
-  
+
   return isNaN(result) ? 100 : result;
 });
 
 window.addEventListener('keydown', (e) => {
+  e.preventDefault();
   const key = e.key;
   if (key == 'Backspace') {
     backSpace();
