@@ -3,17 +3,11 @@ import { ref, computed } from 'vue';
 import LetterVue from '@/components/LetterVue.vue';
 import getCorrectLength from '@/utils/getCorrectLength';
 import TheProgressBar from './TheProgressBar.vue';
+import { texts } from '@/texts';
+
 const LETTERS = /^[\x20-\x7E]{1}$/;
 const EXTRA_BUTTONS = /Shift|Alt|Tab|Control|F(1[0-2]|[1-9])/;
-const words = [
-  'How about "SwiftKeys" for your touch typing project?',
-  'notebook',
-  'cancel',
-  'explosive',
-  'wonder',
-  'laptop',
-  'writing',
-].map((w) => w + '\n');
+const words = texts.map((w) => w + '\n');
 
 const currentWord = computed(() => words[currentWordIndex.value]);
 const currentWordIndex = ref(0);
@@ -53,13 +47,15 @@ window.addEventListener('keydown', (e) => {
   }
 
   if (
-    currentWord.value == passedLetters.value.join('') ||
+    currentWord.value === passedLetters.value.join('') ||
     currentLetterIndex.value == currentWord.value.length
   ) {
     reset();
-    if (currentWordIndex.value < words.length - 1) currentWordIndex.value++;
-    else currentWordIndex.value = 0;
-    return;
+    if (currentWordIndex.value < words.length - 1) {
+      currentWordIndex.value++;
+    } else {
+      currentWordIndex.value = 0
+    };
   }
 });
 
@@ -84,16 +80,11 @@ function backSpace() {
 }
 </script>
 <template>
-  <div class="flex flex-col items-center justify-center">
+  <div class="relative overflow-hidden flex flex-col items-center justify-center">
     <div class="flex items-end flex-wrap text-[46px] px-[40px] max-w-[1000px]">
       <template v-for="(letter, i) in currentWord" :key="i">
-        <LetterVue
-          :index="i"
-          :currentLetterIndex="currentLetterIndex"
-          :letter="letter"
-          :passedLetters="passedLetters"
-          :wrongLetters="wrongLetters"
-        />
+        <LetterVue :index="i" :currentLetterIndex="currentLetterIndex" :letter="letter" :passedLetters="passedLetters"
+          :wrongLetters="wrongLetters" />
       </template>
     </div>
   </div>
