@@ -4,16 +4,19 @@ import LetterVue from '@/components/LetterVue.vue';
 import getCorrectLength from '@/utils/getCorrectLength';
 import TheProgressBar from './TheProgressBar.vue';
 import { texts } from '@/texts';
-
+// TODO: добавить функции для translate
 const LETTERS = /^[\x20-\x7E]{1}$/;
 const EXTRA_BUTTONS = /Shift|Alt|Tab|Control|F(1[0-2]|[1-9])/;
-const words = texts.map((w) => w + '\n');
-
+const words = texts;
+console.log(words[0].split('\n'));
 const currentWord = computed(() => words[currentWordIndex.value]);
 const currentWordIndex = ref(0);
 const passedLetters = ref<string[]>([]);
 const wrongLetters = ref<string[]>([]);
 const currentLetterIndex = ref(0);
+const translateIndex = ref(0);
+const translate = 25;
+const translateX = ref(0);
 
 const accuracy = computed(() => {
   const passedLettersLength = getCorrectLength(passedLetters.value);
@@ -57,6 +60,10 @@ window.addEventListener('keydown', (e) => {
       currentWordIndex.value = 0
     };
   }
+
+  if (currentLetterIndex.value > 25) {
+    translateX.value += translate;
+  }
 });
 
 function reset() {
@@ -77,11 +84,16 @@ function backSpace() {
   if (wrongLength - 1 == currentLetterIndex.value) {
     wrongLetters.value.pop();
   }
+
+  if (translateX.value > 0) {
+    translateX.value -= translate;
+  }
 }
 </script>
 <template>
-  <div class="relative overflow-hidden flex flex-col items-center justify-center">
-    <div class="flex items-end flex-wrap text-[46px] px-[40px] max-w-[1000px]">
+  <div class="wrapper relative overflow-hidden max-w-[1200px] mx-auto flex flex-col items-center justify-center">
+    <div class="flex items-end text-[46px] px-[40px] max-w-[1200px] transition-transform"
+      :style="{ transform: `translateX(${-translateX}px)` }">
       <template v-for="(letter, i) in currentWord" :key="i">
         <LetterVue :index="i" :currentLetterIndex="currentLetterIndex" :letter="letter" :passedLetters="passedLetters"
           :wrongLetters="wrongLetters" />
