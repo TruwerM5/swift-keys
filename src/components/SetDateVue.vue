@@ -37,7 +37,8 @@ window.addEventListener('click', (e) => {
       ref="buttonRef"
       class="px-[5px] border-b-4 border-dotted border-primary"
     >
-      {{ getCurrentTime }} mins
+      {{ getCurrentTime }}
+      mins
     </button>
     <div
       v-show="isOpened"

@@ -17,8 +17,7 @@ const useScoreStore = defineStore('score', {
       const passedLettersLength = getCorrectLength(passed);
       const wrongLettersLength = getCorrectLength(wrong);
       const result = Math.round(
-        (passedLettersLength / (passedLettersLength + wrongLettersLength)) *
-          100,
+        (passedLettersLength / (passedLettersLength + wrongLettersLength)) * 100,
       );
       this.accuracy = result || 100;
     },

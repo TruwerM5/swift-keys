@@ -2,6 +2,7 @@
 
 @theme {
   --color-primary: #6366f1;
+  --color-primary-dark: #3d41db;
   --text-ul: 38px;
   --font-rm: 'Roboto Mono', 'sans-serif';
   --font-roboto: 'Roboto', 'sans-serif';
