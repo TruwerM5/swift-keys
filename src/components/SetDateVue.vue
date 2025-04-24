@@ -30,7 +30,9 @@ window.addEventListener('click', (e) => {
 </script>
 
 <template>
-  <div class="relative flex items-center justify-center gap-[5px] text-lg">
+  <div
+    class="relative flex items-center justify-center gap-[5px] text-lg"
+  >
     <BxTime class="time-icon text-primary text-[25px]" />
     <button
       @click="toggle"

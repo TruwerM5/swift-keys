@@ -5,7 +5,9 @@ import SidebarVue from './components/SidebarVue.vue';
 </script>
 
 <template>
-  <header class="px-[80px] py-[15px] flex items-center justify-between">
+  <header
+    class="px-[80px] py-[15px] flex items-center justify-between"
+  >
     <LogoVue />
     <SidebarVue />
   </header>

@@ -5,7 +5,7 @@ import getCorrectLength from '@/utils/getCorrectLength';
 import TheProgressBar from './TheProgressBar.vue';
 import { texts } from '@/texts';
 import OverlayVue from '@/components/OverlayVue.vue';
-// TODO: добавить функции для translate
+
 const LETTERS = /^[\x20-\x7E]{1}$/;
 const EXTRA_BUTTONS = /Shift|Alt|Tab|Control|F(1[0-2]|[1-9])/;
 const words = texts;
@@ -22,7 +22,9 @@ const accuracy = computed(() => {
   const passedLettersLength = getCorrectLength(passedLetters.value);
   const wrongLettersLength = getCorrectLength(wrongLetters.value);
   const result = Math.round(
-    (passedLettersLength / (passedLettersLength + wrongLettersLength)) * 100,
+    (passedLettersLength /
+      (passedLettersLength + wrongLettersLength)) *
+      100,
   );
 
   return isNaN(result) ? 100 : result;
@@ -44,8 +46,14 @@ window.addEventListener('keydown', (e) => {
     backSpace();
     return;
   }
-  const currentLetter = currentWord.value.charAt(currentLetterIndex.value);
-  if ((LETTERS.test(key) || (key == 'Enter' && currentLetter == '\n')) && key == currentLetter) {
+  const currentLetter = currentWord.value.charAt(
+    currentLetterIndex.value,
+  );
+  if (
+    (LETTERS.test(key) ||
+      (key == 'Enter' && currentLetter == '\n')) &&
+    key == currentLetter
+  ) {
     passedLetters.value[currentLetterIndex.value] = currentLetter;
   }
 
@@ -71,7 +79,7 @@ window.addEventListener('keydown', (e) => {
   }
 });
 
-function start() {
+function startGame() {
   isStarted.value = true;
 }
 
@@ -117,9 +125,13 @@ function moveForwardAll() {
 function incrementLetterIndex() {
   currentLetterIndex.value++;
 }
+
+function pauseGame() {
+  isStarted.value = false;
+}
 </script>
 <template>
-  <OverlayVue v-if="!isStarted" @click="start" />
+  <OverlayVue v-if="!isStarted" @click="startGame" />
   <div
     class="wrapper relative overflow-hidden max-w-[1200px] mx-auto flex flex-col items-center justify-center"
   >
@@ -140,5 +152,10 @@ function incrementLetterIndex() {
       </template>
     </div>
   </div>
-  <TheProgressBar :accuracy="accuracy" :progress="progress" />
+  <TheProgressBar
+    :accuracy="accuracy"
+    :progress="progress"
+    :isStarted="isStarted"
+    @pause="pauseGame"
+  />
 </template>
