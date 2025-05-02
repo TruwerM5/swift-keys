@@ -5,11 +5,12 @@ import getCorrectLength from '@/utils/getCorrectLength';
 import TheProgressBar from './TheProgressBar.vue';
 import { texts } from '@/texts';
 import OverlayVue from '@/components/OverlayVue.vue';
+import type { GameState } from '@/types';
 
 const LETTERS = /^[\x20-\x7E]{1}$/;
 const EXTRA_BUTTONS = /Shift|Alt|Tab|Control|F(1[0-2]|[1-9])/;
 const words = texts;
-const isStarted = ref(false);
+const gameState = ref<GameState>('unset');
 const currentWord = computed(() => words[currentWordIndex.value]);
 const currentWordIndex = ref(0);
 const passedLetters = ref<string[]>([]);
@@ -18,14 +19,14 @@ const currentLetterIndex = ref(0);
 const translate = 25;
 const translateX = ref(0);
 
+const remainLetters = computed(() => {
+  return currentWord.value.slice(passedLetters.value.length);
+});
+
 const accuracy = computed(() => {
   const passedLettersLength = getCorrectLength(passedLetters.value);
   const wrongLettersLength = getCorrectLength(wrongLetters.value);
-  const result = Math.round(
-    (passedLettersLength /
-      (passedLettersLength + wrongLettersLength)) *
-      100,
-  );
+  const result = Math.round((passedLettersLength / (passedLettersLength + wrongLettersLength)) * 100);
 
   return isNaN(result) ? 100 : result;
 });
@@ -37,7 +38,7 @@ const progress = computed(() => {
 });
 
 window.addEventListener('keydown', (e) => {
-  if (!isStarted.value) {
+  if (gameState.value !== 'started') {
     return;
   }
   e.preventDefault();
@@ -80,7 +81,7 @@ window.addEventListener('keydown', (e) => {
 });
 
 function startGame() {
-  isStarted.value = true;
+  gameState.value = 'started';
 }
 
 function reset() {
@@ -127,35 +128,23 @@ function incrementLetterIndex() {
 }
 
 function pauseGame() {
-  isStarted.value = false;
+  gameState.value = 'paused';
 }
 </script>
 <template>
-  <OverlayVue v-if="!isStarted" @click="startGame" />
-  <div
-    class="wrapper relative overflow-hidden max-w-[1200px] mx-auto flex flex-col items-center justify-center"
-  >
-    <div
-      class="flex items-end text-[46px] px-[40px] max-w-[1200px] transition-transform"
-      :style="{
-        transform: `translateX(${-translateX}px)`,
-      }"
-    >
+  <OverlayVue v-if="gameState !== 'started'" @click="startGame" />
+  <div class="wrapper relative overflow-hidden max-w-[1200px] mx-auto flex flex-col items-center justify-center">
+    <div class="flex items-end text-[46px] px-[40px] max-w-[1200px] transition-transform" :style="{
+      transform: `translateX(${-translateX}px)`,
+    }">
       <template v-for="(letter, i) in currentWord" :key="i">
-        <LetterVue
-          :index="i"
-          :currentLetterIndex="currentLetterIndex"
-          :letter="letter"
-          :passedLetters="passedLetters"
-          :wrongLetters="wrongLetters"
-        />
+        <LetterVue :index="i" :currentLetterIndex="currentLetterIndex" :letter="letter" :passedLetters="passedLetters"
+          :wrongLetters="wrongLetters" />
       </template>
     </div>
+    <div>
+      {{ remainLetters }}
+    </div>
   </div>
-  <TheProgressBar
-    :accuracy="accuracy"
-    :progress="progress"
-    :isStarted="isStarted"
-    @pause="pauseGame"
-  />
+  <TheProgressBar :accuracy="accuracy" :progress="progress" :gameState="gameState" @pause="pauseGame" />
 </template>

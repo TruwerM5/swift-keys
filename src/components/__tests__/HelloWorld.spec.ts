@@ -6,7 +6,9 @@ import SimpleWord from '@/components/SimpleWordVue.vue';
 describe('HelloWorld', () => {
   it('renders properly', () => {
     const wrapper = mount(SimpleWord, {
-      props: { msg: 'Hello Vitest' },
+      props: {
+        msg: 'Hello Vitest',
+      },
     });
     expect(wrapper.text()).toContain('Hello Vitest');
   });

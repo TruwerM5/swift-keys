@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import StopwatchVue from './StopwatchVue.vue';
 import { FaPause } from '@kalimahapps/vue-icons';
+import type { GameState } from '@/types';
 
 const props = defineProps<{
   accuracy: number;
   progress: number;
-  isStarted: boolean;
+  gameState: GameState;
 }>();
 
 defineEmits(['pause']);
@@ -13,8 +14,7 @@ defineEmits(['pause']);
 
 <template>
   <div
-    class="absolute bottom-3 left-1/2 -translate-x-1/2 p-6 bg-white w-[500px] mx-auto rounded-2xl flex items-center justify-between text-center"
-  >
+    class="absolute bottom-3 left-1/2 -translate-x-1/2 p-6 bg-white w-[500px] mx-auto rounded-2xl flex items-center justify-between text-center">
     <div>
       <p class="text-2xl">{{ accuracy }}%</p>
       <span>accuracy</span>
@@ -23,11 +23,9 @@ defineEmits(['pause']);
       <p class="text-2xl">{{ progress.toFixed(2) }}%</p>
       <span>progress</span>
     </div>
-    <StopwatchVue :is-started="isStarted" />
+    <StopwatchVue :game-state="gameState" />
     <button @click="$emit('pause')">
-      <FaPause
-        class="text-primary text-4xl transition-colors hover:text-primary-dark"
-      />
+      <FaPause class="text-primary text-4xl transition-colors hover:text-primary-dark" />
     </button>
   </div>
 </template>

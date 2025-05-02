@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { ref, watch, computed } from 'vue';
+import type { GameState } from '@/types';
 
 const timerId = ref<null | number>(null);
 const passedSeconds = ref(0);
 
 const props = defineProps<{
-  isStarted: boolean;
+  gameState: GameState;
 }>();
 
 function startStopwatch() {
@@ -20,22 +21,19 @@ function stopStopwatch() {
   }
 }
 
-function beautifyStopwatch() {
+const beautifyStopwatch = computed(() => {
   const minutes = Math.floor(passedSeconds.value / 60);
-  const stringSeconds = `${passedSeconds.value % 60}`.padStart(
-    2,
-    '0',
-  );
+  const stringSeconds = `${passedSeconds.value % 60}`.padStart(2, '0');
 
   return `${minutes}:${stringSeconds}`;
-}
+});
 
 watch(
-  () => props.isStarted,
+  () => props.gameState,
   (value) => {
-    if (value) {
+    if (value === 'started') {
       startStopwatch();
-    } else {
+    } else if (value === 'paused') {
       stopStopwatch();
     }
   },
@@ -44,7 +42,9 @@ watch(
 
 <template>
   <div class="stopwatch">
-    <p class="text-2xl">{{ beautifyStopwatch() }}</p>
+    <p class="text-2xl">
+      {{ beautifyStopwatch }}
+    </p>
     <p>passed</p>
   </div>
 </template>

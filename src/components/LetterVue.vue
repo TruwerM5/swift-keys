@@ -31,8 +31,7 @@ const letterClassName = computed(() => {
 });
 
 const textContent = computed(() => {
-  const condition =
-    letterClassName.value.includes(TEXT_RED) && props.letter === ' ';
+  const condition = letterClassName.value.includes(TEXT_RED) && props.letter === ' ';
 
   if (condition) {
     return UNDERSCORE;
@@ -47,13 +46,7 @@ const textContent = computed(() => {
     <span class="text-zinc-400">&para;</span>
     <br />
   </template>
-  <span
-    v-else
-    :class="[
-      letterClassName,
-      'min-w-[25px] min-h-[25px] inline-block',
-    ]"
-  >
+  <span v-else :class="[letterClassName, 'min-w-[25px] min-h-[25px] inline-block']">
     {{ textContent }}
   </span>
 </template>
