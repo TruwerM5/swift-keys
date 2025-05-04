@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, watch, computed } from 'vue';
-import type { GameState } from '@/types';
+import { GameState } from '@/types';
 
 const timerId = ref<null | number>(null);
 const passedSeconds = ref(0);
@@ -15,10 +15,15 @@ function startStopwatch() {
   }, 1000);
 }
 
-function stopStopwatch() {
+function pauseStopwatch() {
   if (timerId.value) {
     clearInterval(timerId.value);
   }
+}
+
+function resetStopwatch() {
+  pauseStopwatch();
+  passedSeconds.value = 0;
 }
 
 const beautifyStopwatch = computed(() => {
@@ -31,10 +36,12 @@ const beautifyStopwatch = computed(() => {
 watch(
   () => props.gameState,
   (value) => {
-    if (value === 'started') {
+    if (value === GameState.STARTED) {
       startStopwatch();
-    } else if (value === 'paused') {
-      stopStopwatch();
+    } else if (value === GameState.PAUSED) {
+      pauseStopwatch();
+    } else if (value === GameState.STOPPED) {
+      resetStopwatch();
     }
   },
 );

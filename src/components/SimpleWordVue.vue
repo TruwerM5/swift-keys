@@ -5,12 +5,12 @@ import getCorrectLength from '@/utils/getCorrectLength';
 import TheProgressBar from './TheProgressBar.vue';
 import { texts } from '@/texts';
 import OverlayVue from '@/components/OverlayVue.vue';
-import type { GameState } from '@/types';
+import { GameState } from '@/types';
 
 const LETTERS = /^[\x20-\x7E]{1}$/;
 const EXTRA_BUTTONS = /Shift|Alt|Tab|Control|F(1[0-2]|[1-9])/;
 const words = texts;
-const gameState = ref<GameState>('unset');
+const gameState = ref<GameState>(GameState.UNSET);
 const currentWord = computed(() => words[currentWordIndex.value]);
 const currentWordIndex = ref(0);
 const passedLetters = ref<string[]>([]);
@@ -38,7 +38,7 @@ const progress = computed(() => {
 });
 
 window.addEventListener('keydown', (e) => {
-  if (gameState.value !== 'started') {
+  if (gameState.value !== GameState.STARTED) {
     return;
   }
   e.preventDefault();
@@ -47,14 +47,8 @@ window.addEventListener('keydown', (e) => {
     backSpace();
     return;
   }
-  const currentLetter = currentWord.value.charAt(
-    currentLetterIndex.value,
-  );
-  if (
-    (LETTERS.test(key) ||
-      (key == 'Enter' && currentLetter == '\n')) &&
-    key == currentLetter
-  ) {
+  const currentLetter = currentWord.value.charAt(currentLetterIndex.value);
+  if ((LETTERS.test(key) || (key == 'Enter' && currentLetter == '\n')) && key == currentLetter) {
     passedLetters.value[currentLetterIndex.value] = currentLetter;
   }
 
@@ -67,10 +61,7 @@ window.addEventListener('keydown', (e) => {
     moveForwardAll();
   }
 
-  if (
-    currentWord.value === passedLetters.value.join('') ||
-    currentLetterIndex.value == currentWord.value.length
-  ) {
+  if (currentWord.value === passedLetters.value.join('') || currentLetterIndex.value == currentWord.value.length) {
     reset();
     if (currentWordIndex.value < words.length - 1) {
       incrementLetterIndex();
@@ -81,7 +72,11 @@ window.addEventListener('keydown', (e) => {
 });
 
 function startGame() {
-  gameState.value = 'started';
+  gameState.value = GameState.STARTED;
+}
+
+function stopGame() {
+  gameState.value = GameState.STOPPED;
 }
 
 function reset() {
@@ -128,23 +123,37 @@ function incrementLetterIndex() {
 }
 
 function pauseGame() {
-  gameState.value = 'paused';
+  gameState.value = GameState.PAUSED;
 }
 </script>
 <template>
-  <OverlayVue v-if="gameState !== 'started'" @click="startGame" />
+  <OverlayVue v-if="gameState !== GameState.STARTED" @click="startGame" />
   <div class="wrapper relative overflow-hidden max-w-[1200px] mx-auto flex flex-col items-center justify-center">
-    <div class="flex items-end text-[46px] px-[40px] max-w-[1200px] transition-transform" :style="{
-      transform: `translateX(${-translateX}px)`,
-    }">
+    <div
+      class="flex items-end text-[46px] px-[40px] max-w-[1200px] transition-transform"
+      :style="{
+        transform: `translateX(${-translateX}px)`,
+      }"
+    >
       <template v-for="(letter, i) in currentWord" :key="i">
-        <LetterVue :index="i" :currentLetterIndex="currentLetterIndex" :letter="letter" :passedLetters="passedLetters"
-          :wrongLetters="wrongLetters" />
+        <LetterVue
+          :index="i"
+          :currentLetterIndex="currentLetterIndex"
+          :letter="letter"
+          :passedLetters="passedLetters"
+          :wrongLetters="wrongLetters"
+        />
       </template>
     </div>
     <div>
       {{ remainLetters }}
     </div>
   </div>
-  <TheProgressBar :accuracy="accuracy" :progress="progress" :gameState="gameState" @pause="pauseGame" />
+  <TheProgressBar
+    :accuracy="accuracy"
+    :progress="progress"
+    :gameState="gameState"
+    @pause="pauseGame"
+    @stop="stopGame"
+  />
 </template>
